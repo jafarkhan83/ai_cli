@@ -21,4 +21,4 @@ def create_response(prompt):
 
 def get_response(prompt):
     response = create_response(prompt)
-    return llm.invoke(response)
+    return llm.stream(response)
