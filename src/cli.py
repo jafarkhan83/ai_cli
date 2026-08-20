@@ -94,6 +94,11 @@ def run_cli_stream():
                 )   
             )
 
+def json_structured_output():
+    prompt = take_input()
+    response = call_llm_and_get_response(prompt)
+    print(response.content)
+
 if __name__ == "__main__":
     while True:
-        run_cli_stream()
+        json_structured_output()
