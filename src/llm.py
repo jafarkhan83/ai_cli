@@ -52,8 +52,6 @@ def get_response(query):
     response = agent.invoke({"messages": messages})
     current_response = "user: " + query + ", assistant: " + str(response['structured_response'].short_answer)
 
-    print(store, end='\n\n')
-
     update_chat_history(current_response, session_id)
 
     return response
