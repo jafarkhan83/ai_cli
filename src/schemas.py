@@ -1,3 +1,6 @@
+from pydantic import BaseModel, Field
+from typing import List
+
 json_schema = {
     "type": "object",
     "properties" : {
@@ -26,3 +29,21 @@ json_schema = {
     },
     "required": ["title", "description", "content", "metadata"]
 }
+
+class ChatHistory(BaseModel):
+    user_asked: str
+    answer: str = Field(max_length=250)
+
+class Metadata(BaseModel):
+    input_user_tokens: int
+    input_system_tokens: int
+    output_tokens: int
+    total_tokens: int
+    chat_history: List[ChatHistory]
+
+class Response(BaseModel):
+    title: str
+    description: str
+    content: str
+    short_answer: str = Field(max_length=250)
+    metadata: Metadata

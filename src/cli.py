@@ -97,7 +97,8 @@ def run_cli_stream():
 def json_structured_output():
     prompt = take_input()
     response = call_llm_and_get_response(prompt)
-    print(response.content)
+    json_response = response["structured_response"].model_dump_json()
+    print(json_response)
 
 if __name__ == "__main__":
     while True:
