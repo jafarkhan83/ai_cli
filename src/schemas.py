@@ -32,7 +32,7 @@ json_schema = {
 
 class ChatHistory(BaseModel):
     user_asked: str
-    answer: str = Field(max_length=250)
+    short_answer: str
 
 class Metadata(BaseModel):
     input_user_tokens: int
@@ -41,9 +41,7 @@ class Metadata(BaseModel):
     total_tokens: int
     chat_history: List[ChatHistory]
 
-class Response(BaseModel):
-    title: str
-    description: str
-    content: str
-    short_answer: str = Field(max_length=250)
+class ResponseSchema(BaseModel):
+    answer: str
+    short_answer: str
     metadata: Metadata

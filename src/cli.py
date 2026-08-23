@@ -94,12 +94,20 @@ def run_cli_stream():
                 )   
             )
 
-def json_structured_output():
+def get_response_with_structured_output():
     prompt = take_input()
-    response = call_llm_and_get_response(prompt)
-    json_response = response["structured_response"].model_dump_json()
-    print(json_response)
+    try:
+        response = get_response(prompt)
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+    
+    return response
 
 if __name__ == "__main__":
     while True:
-        json_structured_output()
+        response = get_response_with_structured_output()
+        if response is None:
+            print("Failed to get response.")
+        else:
+            console.print(Panel(Markdown(response.answer), border_style="green", title="AI Response"))

@@ -11,5 +11,9 @@ def get_whether(city: str) -> str:
 		"key" : os.getenv("WHETHER_API_KEY"),
 		"q" : city
 	}
-    response = requests.get(url=url, params=params)
+
+    try:
+        response = requests.get(url=url, params=params)
+    except Exception as e:
+        return f"Error fetching weather data: {e}"
     return response.json()['current']['temp_c']
