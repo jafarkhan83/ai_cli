@@ -1,0 +1,272 @@
+[
+    {
+        "id": "tool_001",
+        "category": "tool_routing",
+        "query": "What's the weather in Tokyo?",
+        "session_id": "test_tool_001",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "Tokyo",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should call the weather tool with the correct location."
+    },
+    {
+        "id": "tool_002+memory_check",
+        "category": "tool_routing",
+        "query": "What's the weather in Tokyo? and my name is Jaffar.",
+        "session_id": "test_tool_002",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "Tokyo",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should call the weather tool with the correct location."
+    },
+    {
+        "id": "tool_002+memory_check",
+        "category": "tool_routing",
+        "query": "What is my name?",
+        "session_id": "test_tool_002",
+        "expected": {
+        "tool_called": null,
+        "tool_args_contains": "Jaffar",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should returns the name Jaffar"
+    },
+    {
+        "id": "nontool_001",
+        "category": "non_tool_qa",
+        "query": "What's the capital of France?",
+        "session_id": "test_nontool_001",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "Paris"
+        },
+        "notes": "Should answer directly without invoking any tool."
+    },
+    {
+        "id": "tool_edge_001",
+        "category": "tool_routing",
+        "query": "What's the weather like?",
+        "session_id": "test_tool_edge_001",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "No location is provided, so the system should not invent a location. It may ask the user for a location."
+    },
+    {
+        "id": "tool_edge_002",
+        "category": "tool_routing",
+        "query": "What's the weather in Tokyo and London?",
+        "session_id": "test_tool_edge_002",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": ["Tokyo", "London"],
+        "should_not_hallucinate": true
+        },
+        "notes": "Should correctly handle multiple requested locations without dropping either location."
+    },
+    {
+        "id": "tool_edge_003",
+        "category": "tool_routing",
+        "query": "Tell me about Tokyo's weather history.",
+        "session_id": "test_tool_edge_003",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "A current-weather tool should not automatically be used for historical weather information unless it explicitly supports historical data."
+    },
+    {
+        "id": "tool_edge_005",
+        "category": "tool_routing",
+        "query": "What's the weather in Paris? Also, what's the capital of France?",
+        "session_id": "test_tool_edge_005",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "Paris",
+        "answer_contains": "Paris",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should use the weather tool for the weather portion and answer the factual portion correctly."
+    },
+    {
+        "id": "memory_edge_001",
+        "category": "memory_check",
+        "query": "My name is Iqra.",
+        "session_id": "test_memory_edge_001",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "The system should process the user's name without unnecessarily calling an external tool."
+    },
+    {
+        "id": "memory_edge_002",
+        "category": "memory_check",
+        "query": "What did I tell you my name was?",
+        "session_id": "test_memory_edge_001",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "Iqra",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should retrieve the name from the same session/context."
+    },
+    {
+        "id": "memory_edge_003",
+        "category": "memory_check",
+        "query": "My name is Jaffar.",
+        "session_id": "test_memory_edge_003",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "Stores the initial name for the session."
+    },
+    {
+        "id": "memory_edge_004",
+        "category": "memory_check",
+        "query": "Actually, my name is Ali.",
+        "session_id": "test_memory_edge_003",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "The latest explicit user-provided name should override the previous name."
+    },
+    {
+        "id": "memory_edge_005",
+        "category": "memory_check",
+        "query": "What is my name?",
+        "session_id": "test_memory_edge_003",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "Ali",
+        "answer_not_contains": "Jaffar",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should use the most recent name rather than stale memory."
+    },
+    {
+        "id": "memory_edge_006",
+        "category": "memory_check",
+        "query": "What is my brother's name?",
+        "session_id": "test_memory_edge_003",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true,
+        "answer_not_contains": "Ali"
+        },
+        "notes": "The system should not infer the brother's name from the user's name or invent an answer."
+    },
+    {
+        "id": "session_edge_001",
+        "category": "session_isolation",
+        "query": "What is my name?",
+        "session_id": "test_new_session_001",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "Should not retrieve Jaffar or Ali from a different session unless cross-session memory is explicitly supported."
+    },
+    {
+        "id": "tool_edge_006",
+        "category": "tool_routing",
+        "query": "What's the weather in New York?",
+        "session_id": "test_tool_edge_006",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "New York",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should correctly preserve multi-word locations when passing arguments to the weather tool."
+    },
+    {
+        "id": "tool_edge_007",
+        "category": "tool_routing",
+        "query": "weather Tokyo",
+        "session_id": "test_tool_edge_007",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "Tokyo",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should recognize a terse keyword-style weather request."
+    },
+    {
+        "id": "tool_edge_008",
+        "category": "tool_routing",
+        "query": "Do you know what the weather tool is called?",
+        "session_id": "test_tool_edge_008",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "get_whether",
+        "should_not_hallucinate": true
+        },
+        "notes": "The user is asking about the tool itself, not requesting weather. The weather tool should not be invoked."
+    },
+    {
+        "id": "nontool_edge_001",
+        "category": "non_tool_qa",
+        "query": "What is 25 multiplied by 4?",
+        "session_id": "test_nontool_edge_001",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "100",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should answer a simple arithmetic question without invoking an unrelated tool."
+    },
+    {
+        "id": "nontool_edge_002",
+        "category": "non_tool_qa",
+        "query": "What is the capital of Japan?",
+        "session_id": "test_nontool_edge_002",
+        "expected": {
+        "tool_called": null,
+        "answer_contains": "Tokyo",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should answer directly without invoking the weather tool even though Tokyo is mentioned in the answer."
+    },
+    {
+        "id": "nontool_edge_003",
+        "category": "non_tool_qa",
+        "query": "Can you explain what weather means?",
+        "session_id": "test_nontool_edge_003",
+        "expected": {
+        "tool_called": null,
+        "should_not_hallucinate": true
+        },
+        "notes": "The word 'weather' alone should not trigger the weather tool. The system should understand user intent."
+    },
+    {
+        "id": "tool_edge_009",
+        "category": "tool_routing",
+        "query": "I'm visiting Tokyo tomorrow. What is whether now?",
+        "session_id": "test_tool_edge_009",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": "Tokyo",
+        "should_not_hallucinate": true
+        },
+        "notes": "Should recognize an indirect weather request and preserve the requested location."
+    },
+    {
+        "id": "tool_edge_010",
+        "category": "tool_routing",
+        "query": "Tokyo or Osaka—which one has better weather right now?",
+        "session_id": "test_tool_edge_010",
+        "expected": {
+        "tool_called": "get_whether",
+        "tool_args_contains": ["Tokyo", "Osaka"],
+        "should_not_hallucinate": true
+        },
+        "notes": "Should identify that current weather data is required for both locations rather than guessing."
+    }
+]

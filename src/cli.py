@@ -95,9 +95,10 @@ def run_cli_stream():
             )
 
 def get_response_with_structured_output():
+    session_id = "session_1"
     prompt = take_input()
     try:
-        response = get_response(prompt)
+        response = get_response(prompt, session_id)
     except Exception as e:
         print(f"Error occurred: {e}")
         return None
